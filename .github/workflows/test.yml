@@ -16,7 +16,7 @@ jobs:
         run: ./redpill_tool_chain.sh auto ds920p-7.0.1-42218
       - name: 上传引导镜像到 github actions
       - name: 打包
-        run: tar -cvf custom.tar custom/
+        run: cd custom tar -cvf custom.tar *
         uses: actions/upload-artifact@v3
         with:
           name: dsm-ds920p-7.0.1-42218
