@@ -17,6 +17,7 @@ jobs:
       - name: 上传引导镜像到 github actions
       - name: 打包
         run: cd custom tar -cvf custom.tar *
+      - name: 上传
         uses: actions/upload-artifact@v3
         with:
           name: dsm-ds920p-7.0.1-42218
