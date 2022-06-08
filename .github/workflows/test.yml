@@ -14,10 +14,9 @@ jobs:
         run: ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-dtb.json
       - name: 编译引导镜像
         run: ./redpill_tool_chain.sh auto ds920p-7.0.1-42218
-      - name: 上传引导镜像到 github actions
       - name: 打包
         run: cd custom tar -cvf custom.tar *
-      - name: 上传
+      - name: 上传引导镜像到 github actions
         uses: actions/upload-artifact@v3
         with:
           name: dsm-ds920p-7.0.1-42218
