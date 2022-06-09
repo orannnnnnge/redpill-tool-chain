@@ -20,7 +20,7 @@ jobs:
       - name: 检出项目文件
         run: |
           git clone https://github.com/tossp/redpill-tool-chain.git
-          cp ./redpill-tool-chain/* ./
+          cp -r ./redpill-tool-chain/* ./
 
       - name: 准备构建环境
         run: |
