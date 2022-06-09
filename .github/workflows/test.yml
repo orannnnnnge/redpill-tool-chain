@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     name: 编译 "${{matrix.platform}} ${{matrix.version}}"
     strategy:
-      fail-fast: false
       matrix:
         include:
           - platform: ds920p
@@ -20,11 +19,10 @@ jobs:
       - name: 检出项目文件
         run: |
           git clone https://github.com/tossp/redpill-tool-chain.git
-          cd redpill-tool-chain
 
       - name: 准备构建环境
         run: |
-          chmod +x redpill_tool_chain.sh
+          cd redpill-tool-chain
           ./redpill_tool_chain.sh build ${{matrix.platform}}-${{matrix.version}}
 
       - name: 配置引导镜像
