@@ -27,6 +27,7 @@ jobs:
 
       - name: 配置引导镜像
         run: |
+          cd redpill-tool-chain
           cp sample_user_config.json ${{matrix.platform}}_user_config.json
 
           # 调整VID和PID
