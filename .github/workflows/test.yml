@@ -21,6 +21,7 @@ jobs:
         run: |
           git clone https://github.com/tossp/redpill-tool-chain.git
           cp -r ./redpill-tool-chain/* ./
+          wget https://github.com/orannnnnnge/redpill-tool-chain/raw/master/model_ds920p.dtb
 
       - name: 准备构建环境
         run: |
