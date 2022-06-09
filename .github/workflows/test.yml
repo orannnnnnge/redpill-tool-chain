@@ -1,25 +1,66 @@
-name: CI
-on: push
+name: Build ds920p 7.1.0-42661
+
+on:
+  push:
+    branches:
+      - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    name: 编译 "${{matrix.platform}} ${{matrix.version}}"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: ds920p
+            version: 7.1.0-42661
+
     steps:
       - name: 检出项目文件
-        uses: actions/checkout@v3
-      - name: 配置引导镜像
-        run: cp sample_user_config.json ds920p_user_config.json
+        run: |
+          git clone https://github.com/tossp/redpill-tool-chain.git
+          cd redpill-tool-chain
+
       - name: 准备构建环境
-        run: ./redpill_tool_chain.sh build ds920p-7.0.1-42218
-      - name: 添加驱动
+        run: |
+          ./redpill_tool_chain.sh build ${{matrix.platform}}-${{matrix.version}}
+
+      - name: 配置引导镜像
+        run: |
+          cp sample_user_config.json ${{matrix.platform}}_user_config.json
+
+          # 调整VID和PID
+          sed -i -e 's/0x0001/0x5678/g' -e 's/0x46f4/0xffff/g' ${{matrix.platform}}_user_config.json
+
+          # 调整SN和MAC
+          sed -i -e "s/1234XXX123/${sn:="2150SBRZM65NQ"}/g" -e 's/XXYYXXYYXXYY/1C1B0D99FEC5/g' ${{matrix.platform}}_user_config.json
+
+          # 添加第二张网卡mac并设置网卡数量
+          sed -i -e 's/1C1B0D99FEC5"/&,\n\t"mac2": "1C1B0D99FEC7",\n\t"netif_num": 2/' ${{matrix.platform}}_user_config.json
+
+          cat ${{matrix.platform}}_user_config.json
+
+      - name: 添加扩展驱动
         run: |
           ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-boot-wait.json
-          ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-dtb.json
+          ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-acpid.json
           ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-misc.json
-          ./redpill_tool_chain.sh add https://raw.githubusercontent.com/pocopico/rp-ext/main/igb/rpext-index.json
+          ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-dtb.json
+
       - name: 编译引导镜像
-        run: ./redpill_tool_chain.sh auto ds920p-7.0.1-42218
+        run: |
+          ./redpill_tool_chain.sh auto ${{matrix.platform}}-${{matrix.version}}
+
       - name: 上传引导镜像到 github actions
         uses: actions/upload-artifact@v3
         with:
-          name: dsm-ds920p-7.0.1-42218
+          name: dsm-${{matrix.platform}}-${{matrix.version}}
           path: images/redpill-*.img
+          if-no-files-found: error
+
+      - name: 删除旧的工作流
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          retain_days: 0
+          keep_minimum_runs: 1
