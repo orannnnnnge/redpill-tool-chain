@@ -47,7 +47,7 @@ jobs:
           ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-boot-wait.json
           ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-acpid.json
           ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-misc.json
-          ./redpill_tool_chain.sh add https://github.com/orannnnnnge/redpill-dtb/raw/main/redpill-dtb.json
+          ./redpill_tool_chain.sh add https://github.com/PuXiongfei/redpill-dtb/raw/main/redpill-dtb/rpext-index.json
 
       - name: 编译引导镜像
         run: |
