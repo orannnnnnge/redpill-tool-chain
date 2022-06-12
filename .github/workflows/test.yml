@@ -46,12 +46,7 @@ jobs:
           ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-boot-wait.json
           ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-acpid.json
           ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-misc.json
-          ./redpill_tool_chain.sh add https://github.com/tossp/redpill-tool-chain/raw/master/extensions/redpill-dtb.json
-
-      - name: 添加dtb
-        run: |
-          wget https://github.com/orannnnnnge/redpill-tool-chain/raw/master/model_ds920p.dtb
-          mv model_ds920p.dtb custom/extensions/redpill-dtb/ds920p_42661/
+          ./redpill_tool_chain.sh add https://github.com/orannnnnnge/redpill-dtb/raw/main/redpill-dtb.json
 
       - name: 编译引导镜像
         run: |
